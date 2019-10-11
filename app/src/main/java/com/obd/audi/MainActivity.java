@@ -9,11 +9,11 @@ import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.github.pires.obd.commands.engine.RPMCommand;
 import com.github.pires.obd.commands.protocol.EchoOffCommand;
 import com.github.pires.obd.commands.protocol.LineFeedOffCommand;
 import com.github.pires.obd.commands.protocol.SelectProtocolCommand;
 import com.github.pires.obd.commands.protocol.TimeoutCommand;
-import com.github.pires.obd.commands.temperature.AmbientAirTemperatureCommand;
 import com.github.pires.obd.enums.ObdProtocols;
 import com.obd.audi.utils.BluetoothConnection;
 
@@ -31,7 +31,7 @@ public class MainActivity extends AppCompatActivity {
     private Button airTempButton;
 
     private EditText editText;
-    private AmbientAirTemperatureCommand ambientAirTemperatureCommand = new AmbientAirTemperatureCommand();
+    private RPMCommand rpmCommand = new RPMCommand();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View v) {
                 try {
                     executeCommonCommands();
-                    tempView.setText(ambientTemp());
+                    tempView.setText(rpmCommand());
                 } catch (Exception e) {
                     editText.setText(editText.getText() + "Main - " + e.getMessage());
                 }
@@ -76,9 +76,9 @@ public class MainActivity extends AppCompatActivity {
         new SelectProtocolCommand(ObdProtocols.ISO_9141_2).run(bluetoothConnection.getInputStream(), bluetoothConnection.getOutputStream());
     }
 
-    private String ambientTemp() throws IOException, InterruptedException {
-        ambientAirTemperatureCommand.run(bluetoothConnection.getInputStream(), bluetoothConnection.getOutputStream());
-        return ambientAirTemperatureCommand.getFormattedResult();
+    private String rpmCommand() throws IOException, InterruptedException {
+        rpmCommand.run(bluetoothConnection.getInputStream(), bluetoothConnection.getOutputStream());
+        return String.valueOf(rpmCommand.getRPM());
     }
 
 }
