@@ -33,21 +33,23 @@
         android:layout_gravity="right"/>
 
     <TextView
-        android:id="@+id/temp"
+        android:id="@+id/rpm"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="600dp"
+        android:layout_marginTop="650dp"
         android:textColor="#fff"
-        android:textSize="20dp"
+        android:textSize="30sp"
+        android:layout_marginStart="55dp"
         android:layout_marginLeft="55dp"
         android:text="TextView" />
 
     <EditText
         android:id="@+id/editText"
         android:layout_width="match_parent"
-        android:layout_height="194dp"
+        android:layout_height="100dp"
         android:ems="10"
-        android:layout_gravity="center"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="100dp"
         android:textColor="#fff"
         android:inputType="textMultiLine" />
 
@@ -58,10 +60,20 @@
         android:text="connect OBD" />
 
     <Button
-        android:id="@+id/airTempButton"
+        android:id="@+id/getLiveData"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
-        android:text="get Temperature" />
+        android:layout_marginTop="50dp"
+        android:layout_gravity="center_horizontal"
+        android:text="get LiveData" />
+
+    <TextView
+        android:id="@+id/speed"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="400dp"
+        android:layout_gravity="center_horizontal"
+        android:textSize="30sp"
+        android:text="TextView" />
 
 </FrameLayout>
