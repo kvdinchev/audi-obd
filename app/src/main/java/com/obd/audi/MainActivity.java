@@ -63,11 +63,6 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 while (isGetData) {
-                    try {
-                        sleep(200);
-                    } catch (InterruptedException e) {
-                        editText.setText(e.getMessage());
-                    }
                     updater.post(new Runnable() {
                         @Override
                         public void run() {
@@ -86,16 +81,12 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 isGetData = true;
+                try {
+                    executeCommonCommands();
+                } catch (Exception e) {
+                    editText.setText(e.getMessage());
+                }
                 myThread.start();
-//                try {
-//                    executeCommonCommands();
-//                    while (!Thread.currentThread().isInterrupted()) {
-//                        rpm.setText(rpmCommand());
-//                        speed.setText(rpmCommand());
-//                    }
-//                } catch (Exception e) {
-//                    editText.setText(editText.getText() + "Main - " + e.getMessage());
-//                }
             }
         });
         nextButton.setOnClickListener(new View.OnClickListener() {
