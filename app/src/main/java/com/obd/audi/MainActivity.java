@@ -2,6 +2,7 @@ package com.obd.audi;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -31,6 +32,9 @@ public class MainActivity extends AppCompatActivity {
     private Button nextButton;
     private Button btButton;
     private Button getLiveData;
+    private int num = 1;
+    private Handler updater;
+    private boolean isGetData = true;
 
     private EditText editText;
     private RPMCommand rpmCommand = new RPMCommand();
@@ -53,25 +57,51 @@ public class MainActivity extends AppCompatActivity {
                 bluetoothConnection = new BluetoothConnection(MAC_ADDRESS, editText);
             }
         });
+
+        updater = new Handler();
+        final Thread myThread = new Thread() {
+            @Override
+            public void run() {
+                while (isGetData) {
+                    try {
+                        sleep(200);
+                    } catch (InterruptedException e) {
+                        editText.setText(e.getMessage());
+                    }
+                    updater.post(new Runnable() {
+                        @Override
+                        public void run() {
+                            try {
+                                rpm.setText(rpmCommand());
+                            } catch (Exception e) {
+                                editText.setText(e.getMessage());
+                            }
+                        }
+                    });
+                num++;
+                }
+            }
+        };
         getLiveData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    executeCommonCommands();
-                    while (!Thread.currentThread().isInterrupted()) {
-                        rpmCommand();
-                        speedCommand();
-                        rpm.setText(rpmCommand());
-                        speed.setText(rpmCommand());
-                    }
-                } catch (Exception e) {
-                    editText.setText(editText.getText() + "Main - " + e.getMessage());
-                }
+                isGetData = true;
+                myThread.start();
+//                try {
+//                    executeCommonCommands();
+//                    while (!Thread.currentThread().isInterrupted()) {
+//                        rpm.setText(rpmCommand());
+//                        speed.setText(rpmCommand());
+//                    }
+//                } catch (Exception e) {
+//                    editText.setText(editText.getText() + "Main - " + e.getMessage());
+//                }
             }
         });
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                isGetData = false;
                 startActivity(new Intent(MainActivity.this, SecondActivity.class));
             }
         });
@@ -82,12 +112,12 @@ public class MainActivity extends AppCompatActivity {
         new EchoOffCommand().run(bluetoothConnection.getInputStream(), bluetoothConnection.getOutputStream());
         new LineFeedOffCommand().run(bluetoothConnection.getInputStream(), bluetoothConnection.getOutputStream());
         new TimeoutCommand(125).run(bluetoothConnection.getInputStream(), bluetoothConnection.getOutputStream());
-        new SelectProtocolCommand(ObdProtocols.ISO_9141_2).run(bluetoothConnection.getInputStream(), bluetoothConnection.getOutputStream());
+        new SelectProtocolCommand(ObdProtocols.AUTO).run(bluetoothConnection.getInputStream(), bluetoothConnection.getOutputStream());
     }
 
     private String rpmCommand() throws IOException, InterruptedException {
         rpmCommand.run(bluetoothConnection.getInputStream(), bluetoothConnection.getOutputStream());
-        return String.valueOf(rpmCommand.getFormattedResult());
+        return rpmCommand.getFormattedResult();
     }
 
     private String speedCommand() throws IOException, InterruptedException {
