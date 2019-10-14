@@ -2,7 +2,6 @@ package com.obd.audi;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -32,8 +31,6 @@ public class MainActivity extends AppCompatActivity {
     private Button nextButton;
     private Button btButton;
     private Button getLiveData;
-    private int num = 1;
-    private Handler updater;
     private boolean isGetData = true;
 
     private EditText editText;
@@ -58,37 +55,27 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        updater = new Handler();
-        final Thread myThread = new Thread() {
-            @Override
-            public void run() {
-                while (isGetData) {
-                    updater.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                rpm.setText(rpmCommand());
-                            } catch (Exception e) {
-                                editText.setText(e.getMessage());
-                            }
-                        }
-                    });
-                num++;
-                }
-            }
-        };
         getLiveData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 isGetData = true;
+
                 try {
                     executeCommonCommands();
                 } catch (Exception e) {
                     editText.setText(e.getMessage());
                 }
-                myThread.start();
+
+                while (isGetData) {
+                    try {
+                        rpm.setText(rpmCommand());
+                    } catch (Exception e) {
+                        editText.setText(e.getMessage());
+                    }
+                }
             }
         });
+
         nextButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -96,7 +83,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(new Intent(MainActivity.this, SecondActivity.class));
             }
         });
-
     }
 
     private void executeCommonCommands() throws IOException, InterruptedException {
