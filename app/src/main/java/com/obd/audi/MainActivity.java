@@ -32,9 +32,9 @@ public class MainActivity extends AppCompatActivity {
     private Button nextButton;
     private Button btButton;
     private Button getLiveData;
-    private int num = 1;
-    private Handler updater;
     private boolean isGetData = true;
+    Runnable updateTextRunnable;
+    private Handler handler = new Handler();
 
     private EditText editText;
     private RPMCommand rpmCommand = new RPMCommand();
@@ -58,25 +58,17 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        updater = new Handler();
-        final Thread myThread = new Thread() {
-            @Override
+        updateTextRunnable = new Runnable() {
             public void run() {
-                while (isGetData) {
-                    updater.post(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                rpm.setText(rpmCommand());
-                            } catch (Exception e) {
-                                editText.setText(e.getMessage());
-                            }
-                        }
-                    });
-                num++;
+                try {
+                    rpm.setText(rpmCommand());
+                } catch (Exception e) {
+                    editText.append(e.getMessage());
                 }
+                handler.postDelayed(this, 100);
             }
         };
+
         getLiveData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -84,9 +76,9 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     executeCommonCommands();
                 } catch (Exception e) {
-                    editText.setText(e.getMessage());
+                    editText.append(e.getMessage());
                 }
-                myThread.start();
+                handler.post(updateTextRunnable);
             }
         });
         nextButton.setOnClickListener(new View.OnClickListener() {
