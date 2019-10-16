@@ -11,7 +11,9 @@ import android.widget.TextView;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.github.pires.obd.commands.SpeedCommand;
+import com.github.pires.obd.commands.engine.MassAirFlowCommand;
 import com.github.pires.obd.commands.engine.RPMCommand;
+import com.github.pires.obd.commands.fuel.ConsumptionRateCommand;
 import com.github.pires.obd.commands.protocol.EchoOffCommand;
 import com.github.pires.obd.commands.protocol.LineFeedOffCommand;
 import com.github.pires.obd.commands.protocol.SelectProtocolCommand;
@@ -29,6 +31,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView textView;
     private TextView rpm;
     private TextView speed;
+    private TextView consumptionRate;
     private Button nextButton;
     private Button btButton;
     private Button getLiveData;
@@ -38,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
 
     private EditText editText;
     private RPMCommand rpmCommand = new RPMCommand();
+    private ConsumptionRateCommand consumptionRateCommand = new ConsumptionRateCommand();
     private SpeedCommand speedCommand = new SpeedCommand();
 
     @Override
@@ -50,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
         textView = (TextView) findViewById(R.id.textView);
         rpm = (TextView) findViewById(R.id.rpm);
         speed = (TextView) findViewById(R.id.speed);
+        consumptionRate = (TextView) findViewById(R.id.consumptionRate);
         nextButton = (Button) findViewById(R.id.nextButton);
         btButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -63,9 +68,19 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     rpm.setText(rpmCommand());
                 } catch (Exception e) {
-                    editText.append(e.getMessage());
+                    editText.append("rpmCommand - " + e.getMessage());
                 }
-                handler.postDelayed(this, 100);
+                try {
+                    speed.setText(speedCommand());
+                } catch (Exception e) {
+                    editText.append("SPEED command - " + e.getMessage());
+                }
+                try {
+                    consumptionRate.setText(consumptionRateCommand());
+                } catch (Exception e) {
+                    editText.append("CONSUMP command - " + e.getMessage());
+                }
+                handler.postDelayed(this, 300);
             }
         };
 
@@ -76,7 +91,7 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     executeCommonCommands();
                 } catch (Exception e) {
-                    editText.append(e.getMessage());
+                    editText.append("commonCommands - " + e.getMessage());
                 }
                 handler.post(updateTextRunnable);
             }
@@ -95,17 +110,22 @@ public class MainActivity extends AppCompatActivity {
         new EchoOffCommand().run(bluetoothConnection.getInputStream(), bluetoothConnection.getOutputStream());
         new LineFeedOffCommand().run(bluetoothConnection.getInputStream(), bluetoothConnection.getOutputStream());
         new TimeoutCommand(125).run(bluetoothConnection.getInputStream(), bluetoothConnection.getOutputStream());
-        new SelectProtocolCommand(ObdProtocols.AUTO).run(bluetoothConnection.getInputStream(), bluetoothConnection.getOutputStream());
+        new SelectProtocolCommand(ObdProtocols.ISO_9141_2).run(bluetoothConnection.getInputStream(), bluetoothConnection.getOutputStream());
     }
 
     private String rpmCommand() throws IOException, InterruptedException {
         rpmCommand.run(bluetoothConnection.getInputStream(), bluetoothConnection.getOutputStream());
-        return rpmCommand.getFormattedResult();
+        return String.valueOf(rpmCommand.getRPM());
     }
 
     private String speedCommand() throws IOException, InterruptedException {
         speedCommand.run(bluetoothConnection.getInputStream(), bluetoothConnection.getOutputStream());
-        return String.valueOf(speedCommand.getFormattedResult());
+        return speedCommand.getFormattedResult();
+    }
+
+    private String consumptionRateCommand() throws IOException, InterruptedException {
+        consumptionRateCommand.run(bluetoothConnection.getInputStream(), bluetoothConnection.getOutputStream());
+        return consumptionRateCommand.getFormattedResult();
     }
 
 }

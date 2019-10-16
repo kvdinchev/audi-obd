@@ -23,7 +23,7 @@ public class BluetoothConnection {
         this.editText = editText;
         UUID uuid = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB");
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-//        if(bluetoothAdapter != null && bluetoothAdapter.isEnabled()) {
+//        while (!bluetoothSocket.isConnected()) {
             try {
                 BluetoothDevice device = bluetoothAdapter.getRemoteDevice(macAddress);
                 bluetoothAdapter.cancelDiscovery();

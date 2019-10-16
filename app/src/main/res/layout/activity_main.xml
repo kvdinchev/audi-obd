@@ -18,6 +18,8 @@
         android:layout_height="wrap_content"
         android:id="@+id/textView"
         android:text="PRESET 1"
+        android:textSize="25sp"
+        android:layout_marginTop="5dp"
         android:textColor="#fff"
         android:layout_gravity="center_horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -74,7 +76,19 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="400dp"
         android:layout_gravity="center_horizontal"
+        android:textColor="#fff"
+        android:textSize="40sp"
+        android:text="TextView" />
+
+    <TextView
+        android:id="@+id/consumptionRate"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="650dp"
+        android:textColor="#fff"
         android:textSize="30sp"
+        android:layout_marginStart="255dp"
+        android:layout_marginLeft="155dp"
         android:text="TextView" />
 
 </FrameLayout>
