@@ -14,81 +14,48 @@
         android:src="@drawable/preset1" />
 
     <TextView
+        android:id="@+id/preset1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/textView"
-        android:text="PRESET 1"
-        android:textSize="25sp"
-        android:layout_marginTop="5dp"
-        android:textColor="#fff"
         android:layout_gravity="center_horizontal"
+        android:layout_marginTop="5dp"
+        android:text="PRESET 1"
+        android:textColor="#fff"
+        android:textSize="25sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/nextButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Go to preset 2"
-        android:layout_gravity="right"/>
-
     <TextView
         android:id="@+id/rpm"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
         android:layout_marginTop="650dp"
+        android:text="TextView"
         android:textColor="#fff"
-        android:textSize="30sp"
-        android:layout_marginStart="55dp"
-        android:layout_marginLeft="55dp"
-        android:text="TextView" />
+        android:textSize="30sp" />
 
     <EditText
         android:id="@+id/editText"
         android:layout_width="match_parent"
         android:layout_height="100dp"
-        android:ems="10"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="100dp"
-        android:textColor="#fff"
+        android:ems="10"
         android:inputType="textMultiLine"
-        android:scrollbarAlwaysDrawVerticalTrack="true"/>
-
-    <Button
-        android:id="@+id/connectBt"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="connect OBD" />
-
-    <Button
-        android:id="@+id/getLiveData"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
-        android:layout_gravity="center_horizontal"
-        android:text="get LiveData" />
+        android:scrollbarAlwaysDrawVerticalTrack="true"
+        android:textColor="#fff" />
 
     <TextView
         android:id="@+id/speed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="400dp"
         android:layout_gravity="center_horizontal"
+        android:layout_marginTop="400dp"
+        android:text="TextView"
         android:textColor="#fff"
-        android:textSize="40sp"
-        android:text="TextView" />
-
-    <TextView
-        android:id="@+id/consumptionRate"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="650dp"
-        android:textColor="#fff"
-        android:textSize="30sp"
-        android:layout_marginStart="255dp"
-        android:layout_marginLeft="155dp"
-        android:text="TextView" />
+        android:textSize="40sp" />
 
 </FrameLayout>
